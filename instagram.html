@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script type="text/javascript" src="DATA/instagram_output.js"></script>
+        <script type="text/javascript" >
+            function load() {
+                const div = document.getElementById('data');
+
+                for(let i = 0; i < instagram_output.graphql.hashtag.edge_hashtag_to_media.edges.length; i++) {
+                    img = "<img class='tile' src='"+instagram_output.graphql.hashtag.edge_hashtag_to_media.edges[i].node.display_url+"'>";
+                    div.innerHTML = div.innerHTML + img;
+                }
+            }
+        </script>
+        <style>
+            #data {
+                display: flex;
+                height: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            .tile {
+                max-width: 320px;
+                max-height: 320px;
+                margin: 10px;
+            }
+        </style>
+
+    </head>
+    <body onload="load()">
+        <div id="data"></div>
+    </body>
+</html>

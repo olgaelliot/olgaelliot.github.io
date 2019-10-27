@@ -1,0 +1,23 @@
+body {
+  background-color: gray;
+}
+
+.background {
+z-index: 0;
+}
+
+.title {
+  font-family: cursive;
+  color: white;
+  font-size: 150px;
+  text-shadow: 2px 2px 5px #000000;
+  text-align:center;
+  margin-left: 55%;
+  margin-right: 45%;
+  width:50%;
+  margin-top: -60%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  display: flex;
+  position: absolute;
+}
