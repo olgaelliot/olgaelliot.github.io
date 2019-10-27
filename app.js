@@ -11,49 +11,11 @@ var app = express();
 
 var DOWNLOAD_DIR = './DATA/';
 
-//wikipedia
-app.get('/wikipedia', function(req, res) {
-
-  var url = "https://en.wikipedia.org/wiki/Angel_Falls";
-
-  // let's make the http request to the url above using the 'request' dependency
-  request(url, function(error, response, html) {
-
-    // only execute if there's no error
-    if( !error ){
-
-      // we can use the dependency 'cheerio' to traverse the DOM and use jQuery-like selectors and functions
-      var $ = cheerio.load(html);
-
-      // let's create a javascript object to save our data in
-      var wiki_data = {
-        img: '',
-      };
-
-      // all the content we are looking for are inside a div with the id 'content', let's filter so that the data we are working with is without unnecessary data
-      $('#content').filter(function(){
-
-        // we can access the properties of our javascript object by writing the name of the object 'dot' and then the name of the property
-        wiki_data.img = $(this).find('img').attr('src');
-
-      });
-
-      // send the data we've stored in our object back to the browser
-      res.send(wiki_data);
-
-      fs.writeFile('./data/wiki_output.js', "var wiki_output = " + JSON.stringify(wiki_data), function(error){
-        console.log("File is written successfully!");
-      });
-    }
-  });
-});
-
-
 // INSTAGRAM SCRAPER: access by going to 'localhost:2100/instagram'
 app.get('/instagram', function(req, res){
 
   // try any hashtags and see the results, make sure to write INSIDE the quotation marks
-  var hashtag = 'waterfall';
+  var hashtag = 'face';
   var url = 'https://instagram.com/explore/tags/'+ hashtag +'/?__a=1';
 
   // let's make the http request to the url above using the 'request' dependency
@@ -87,6 +49,47 @@ app.get('/instagram', function(req, res){
     }
   });
 });
+
+
+// TRIPADVISOR SCRAPER
+app.get('/tripadvisor', function(req, res) {
+
+  var url = "https://www.tripadvisor.com/Attraction_Review-g186612-d216191-Reviews-Torc_Waterfall-Killarney_County_Kerry.html";
+
+  // let's make the http request to the url above using the 'request' dependency
+  request(url, function(error, response, html) {
+
+    // only execute if there's no error
+    if( !error ){
+
+      // we can use the dependency 'cheerio' to traverse the DOM and use jQuery-like selectors and functions
+      var $ = cheerio.load(html);
+
+      // let's create a javascript object to save our data in
+      var tripadvisor_data = {
+        review: '',
+      };
+
+     // all the content we are looking for are inside divs with the id 'review-container', let's filter so that the data we are working with is without unnecessary data
+            $('#review-container').filter(function(){
+
+              // we can access the properties of our javascript object by writing the name of the object 'dot' and then the name of the property
+              tripadvisor_data.review = $(this).find('img').attr('src');
+
+            });
+
+            // send the data we've stored in our object back to the browser
+            res.send(tripadvisor_data);
+
+            fs.writeFile('./DATA/tripadvisor_output.js', "var tripadvisor_output = " + JSON.stringify(tripadvisor_data), function(error){
+              console.log("File is written successfully!");
+            });
+          }
+        });
+      });
+
+
+
 var download_file_curl = function(file_url) {
  // extract the file name
  var file_name = url.parse(file_url).pathname.split('/').pop();
